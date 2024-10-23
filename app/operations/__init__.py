@@ -3,29 +3,86 @@ Can add, subtract, multiply, and divide. All inputs and outputs
 are typehinted to be floats.
 '''
 
-def add(a: float, b: float) -> float:
-    '''
-    Returns the sum of two floats.
-    '''
-    return a + b
+from abc import ABC, abstractmethod # Creating abstract base classes (ABC)
 
-def subtract(a: float, b: float) -> float:
+class OperationTemplate(ABC):
     '''
-    Returns the difference of two floats.
-    '''
-    return a - b
+    Abstract base class that creates a template the inherting operation subclasses
+    should follow.
 
-def multiply(a: float, b: float) -> float:
+    Before each operation is executed, the inputs are validated.
     '''
-    Returns the product of two floats.
-    '''
-    return a * b
+    def calculate(self, a: float, b: float) -> float:
+        '''
+        For each subclass inheriting from Operation Template:
+            1. Validate input
+            2. Execute operation
+        '''
+        self.validate(a,b)
+        result = self.execute(a,b)
+        return result
 
-def divide(a: float, b: float) -> float:
+    def validate(self, a: float, b: float):
+        '''
+        Checks inputs are numbers before calculating
+        '''
+        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+            raise ValueError("Both inputs must be numbers.")
+
+    @abstractmethod
+    def execute(self, a: float, b: float) -> float:
+        '''
+        Abstract methods ALL subclasses must implement.
+        Each subclass has their own implementation.
+        '''
+
+# --------------------------------
+# ARITHMETIC OPERATIONS START HERE
+# --------------------------------
+
+class Add(OperationTemplate):
     '''
-    Returns the quotient of two floats.
+    Addition operation inheriting from OperationTemplate.
     '''
-    if b == 0:
-        # Sends an error message when someone tries to divide by zero.
-        raise ValueError("Cannot divide by zero.")
-    return a /b
+    def execute(self, a: float, b: float) -> float:
+        '''
+        Returns the sum of two floats.
+        '''
+        return a + b
+
+class Subtract(OperationTemplate):
+    '''
+    Subtraction operation inheriting from OperationTemplate.
+    '''
+    def execute(self, a: float, b: float) -> float:
+        '''
+        Returns the difference of two floats.
+        '''
+        return a - b
+
+class Multiply(OperationTemplate):
+    '''
+    Multiplication operation inheriting from OperationTemplate.
+    '''
+    def execute(self, a: float, b: float) -> float:
+        '''
+        Returns the product of two floats.
+        '''
+        return a * b
+
+class Divide(OperationTemplate):
+    '''
+    Division operation inheriting from OperationTemplate.
+    '''
+    def execute(self, a: float, b: float) -> float:
+        '''
+        Returns the quotient of two floats.
+        '''
+        if b == 0:
+            # Sends an error message when someone tries to divide by zero.
+            raise ValueError("Cannot divide by zero.")
+        return a / b
+    
+# -------------------------------
+# ARITHMETIC OPERATIONS END HERE
+# -------------------------------
