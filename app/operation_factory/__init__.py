@@ -12,6 +12,7 @@ class OperationFactory:
     '''
     Factory class that creates instances of operations based on the operation type.
     '''
+    @staticmethod
     def create_operation(operation: str) -> OperationTemplate:
         '''
         Creates an instance of the correct operation subclass based on user input.
@@ -26,6 +27,6 @@ class OperationFactory:
         }
 
         try:
-            operations_map[operation.lower()]
+            return operations_map[operation.lower()]
         except KeyError:
             raise KeyError("Operation does not exist.")
