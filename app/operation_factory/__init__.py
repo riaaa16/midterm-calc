@@ -29,4 +29,4 @@ class OperationFactory:
         try:
             return operations_map[operation.lower()]
         except KeyError:
-            raise KeyError("Operation does not exist.")
+            raise ValueError("Operation does not exist.")
