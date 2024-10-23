@@ -6,6 +6,11 @@ arithmetic operations: addition, subtraction, multiplication, and division.
 from app.operation_factory import OperationFactory
 
 def calculator():
+    '''
+    Calculator REPL that loops continuously to take user input.
+    Raises exceptions for invalid input.
+    Will end once the user types 'exit'.
+    '''
     print("Welcome to the calculator! Type 'help' for a list of commands.")
 
     # Start REPL
@@ -39,5 +44,8 @@ def calculator():
             result = operation.calculate(num1, num2)
             print(f"Result: {result}")
 
-        except ValueError as e:
-            print("Invalid input. Please enter a valid operation and two numbers. Type 'help' for instructions")
+        except ValueError:
+            print(
+                "Invalid input. Please enter a valid operation and two numbers. "
+                "Type 'help' for instructions."
+            )
