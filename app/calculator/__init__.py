@@ -24,6 +24,7 @@ def calculator():
             print("    ✶ multiply <num1> <num2>    : Multiplies two numbers.")
             print("    ✶ divide   <num1> <num2>    : Divides two numbers.")
             print("    ✶ exit                      : Exits the calculator.")
+            continue
 
         # Exit REPL
         if user_input.lower() == 'exit':
