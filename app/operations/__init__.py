@@ -4,6 +4,7 @@ are typehinted to be floats.
 '''
 
 from abc import ABC, abstractmethod # Creating abstract base classes (ABC)
+import logging
 
 class OperationTemplate(ABC):
     '''
@@ -20,6 +21,7 @@ class OperationTemplate(ABC):
         '''
         self.validate(a,b)
         result = self.execute(a,b)
+        self.log_result(a, b, result)
         return result
 
     def validate(self, a: float, b: float):
@@ -27,7 +29,12 @@ class OperationTemplate(ABC):
         Checks inputs are numbers before calculating
         '''
         if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+            logging.error("Invalid input: %s, %s (Inputs must be numbers)", a, b)
             raise ValueError("Both inputs must be numbers.")
+        
+    def log_result(self, a: float, b: float, result: float):
+        '''Logs result of calculation'''
+        logging.info(f"Operation performed: {a} and {b} -> Result: {result}")
 
     @abstractmethod
     def execute(self, a: float, b: float) -> float:
@@ -80,6 +87,7 @@ class Divide(OperationTemplate):
         '''
         if b == 0:
             # Sends an error message when someone tries to divide by zero.
+            logging.error("Attempted to divide by zero.")
             raise ValueError("Cannot divide by zero.")
         return a / b
     

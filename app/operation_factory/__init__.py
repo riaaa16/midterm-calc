@@ -7,6 +7,7 @@ Exceptions:
 '''
 
 from app.operations import OperationTemplate, Add, Subtract, Multiply, Divide
+import logging
 
 class OperationFactory:
     '''
@@ -27,6 +28,8 @@ class OperationFactory:
         }
 
         try:
+            logging.debug("Creating operation: %s", operation)
             return operations_map[operation.lower()]
         except KeyError:
+            logging.error("Tried to call unknown operation.")
             raise ValueError("Operation does not exist.")
