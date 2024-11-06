@@ -31,10 +31,10 @@ class OperationTemplate(ABC):
         if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
             logging.error("Invalid input: %s, %s (Inputs must be numbers)", a, b)
             raise ValueError("Both inputs must be numbers.")
-        
+
     def log_result(self, a: float, b: float, result: float):
         '''Logs result of calculation'''
-        logging.info(f"Operation performed: {a} and {b} -> Result: {result}")
+        logging.info("Operation performed: %s and %s -> Result: %s", a, b, result)
 
     @abstractmethod
     def execute(self, a: float, b: float) -> float:
@@ -90,7 +90,7 @@ class Divide(OperationTemplate):
             logging.error("Attempted to divide by zero.")
             raise ValueError("Cannot divide by zero.")
         return a / b
-    
+
 # -------------------------------
 # ARITHMETIC OPERATIONS END HERE
 # -------------------------------
