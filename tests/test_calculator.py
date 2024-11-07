@@ -1,3 +1,10 @@
+''''
+Tests valid and invalid operation input.
+Tests to see help command is printed properly.
+The history_manager methods are tested in
+test_history_manager.py
+'''
+
 import logging
 from unittest.mock import patch, call, MagicMock, PropertyMock
 import pytest
@@ -58,7 +65,9 @@ def test_help_command(mock_print, caplog):
     mock_print.assert_any_call("    ✶ multiply <num1> <num2>    : Multiplies two numbers.")
     mock_print.assert_any_call("    ✶ divide   <num1> <num2>    : Divides two numbers.")
     mock_print.assert_any_call("    ✶ list                      : Shows operation history.")
-    mock_print.assert_any_call("    ✶ undo                      : Removes last operation from history.")
+    mock_print.assert_any_call(
+        "    ✶ undo                      : Removes last operation from history."
+    )
     mock_print.assert_any_call("    ✶ exit                      : Exits the calculator.")
     mock_print.assert_any_call("Exiting calculator...")
     assert len(caplog.records) == 0
@@ -94,16 +103,18 @@ def test_calculator_valid_operations(operation_class, operand1, operand2, result
              'exit'
          ]), \
          patch('builtins.open', MagicMock()), \
-         patch.object(pd, 'read_csv', return_value=pd.DataFrame(columns=["Operation", "Operand #1", "Operand #2", "Result"])):
-        
+         patch.object(pd,
+            'read_csv',
+            return_value=pd.DataFrame(columns=["Operation", "Operand #1", "Operand #2", "Result"])
+        ):
+
         calculator()
-        
+
         mock_print.assert_any_call("Result: 7.0")
         mock_print.assert_any_call("Result: 3.0")
         mock_print.assert_any_call("Result: 9.0")
         mock_print.assert_any_call("Result: 3.0")
         mock_print.assert_any_call("Exiting calculator...")
-
 
 @patch('builtins.input', side_effect=[
     'add abc 2',  # Invalid input
