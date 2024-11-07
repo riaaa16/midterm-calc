@@ -29,7 +29,7 @@ def calculator():
     # Flag to track calculator's start
     start = False
 
-    history = History() # create history instance
+    history = History() # Create history instance
 
     print("Welcome to the calculator! Type 'help' for a list of commands.")
 
@@ -59,10 +59,12 @@ def calculator():
             print("Exiting calculator...")
             break
 
+        # Undo last comment
         if command == 'undo':
             history.undo_last()
             continue
 
+        # Print operations performed in this instance's session
         if command == 'list':
             history.print_history()
             continue
@@ -78,7 +80,7 @@ def calculator():
             # Convert operands into floats
             num1, num2 = float(num1_str), float(num2_str)
 
-            # Matching operation string to correct operation class
+            # Creat appropriate operation insance based on user input
             operation = OperationFactory.create_operation(operation_str)
 
             # Perform operation

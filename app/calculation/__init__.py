@@ -7,7 +7,7 @@ from app.operations import OperationTemplate
 @dataclass
 class Calculation:
     '''
-    Runs calculate method on operands and appends calculation to history.
+    Runs calculate method on operands.
     Decorator automatically generates __init__ methods.
     '''
     operation: OperationTemplate  # operation to perform (add, subtract, etc.)
@@ -28,6 +28,6 @@ class Calculation:
         )
 
     def perform_operation(self):
-        '''Performs operation with provided operands'''
+        '''Performs operation with provided operands, delegates to operation'''
         result = self.operation.calculate(self.operand1, self.operand2)  # Perform the calculation
         return result  # return result

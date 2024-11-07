@@ -6,7 +6,6 @@ Features:
 - Records Operation, Operands, and Result in CSV file.
 - Undoes the last operation.
 - Prints history for ONLY that session.
-- Closes the history file once done.
 """
 
 import logging
@@ -50,14 +49,13 @@ class History:
 
     def add_to_history(self, operation: OperationTemplate, operand1: float, operand2: float, result: float):
         """Add an operation to the history."""
-        operation_name = operation.__class__.__name__
 
         # Open the file to append data to it
         with open(self.filename, mode='a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
-            writer.writerow([operation_name, operand1, operand2, result])
+            writer.writerow([operation, operand1, operand2, result])
             file.flush()
-            logging.info("Added '%s %s %s = %s' to history.", operand1, operation_name, operand2, result)
+            logging.info("Added '%s %s %s = %s' to history.", operand1, operation, operand2, result)
 
         # Increment the operation counter
         self.counter += 1
