@@ -34,7 +34,11 @@ def test_add_to_history(operation_class, operand1, operand2, result):
 
     # Mock file-writing methods (open) to avoid file operations
     with patch('builtins.open', MagicMock()), \
-         patch.object(pd, 'read_csv', return_value=pd.DataFrame(columns=["Operation", "Operand #1", "Operand #2", "Result"])):
+         patch.object(
+             pd,
+             'read_csv',
+             return_value=pd.DataFrame(columns=["Operation", "Operand #1", "Operand #2", "Result"])
+        ):
 
         # Add the operation to history
         operation = operation_class()
@@ -97,7 +101,10 @@ def test_print_history():
 
     # Mock file-writing methods (open) to avoid file operations
     with patch('builtins.open', MagicMock()), \
-         patch.object(pd, 'read_csv', return_value=pd.DataFrame(columns=["Operation", "Operand #1", "Operand #2", "Result"])), \
+         patch.object(pd,
+            'read_csv',
+            return_value=pd.DataFrame(columns=["Operation", "Operand #1", "Operand #2", "Result"])
+        ), \
          patch('builtins.print') as mock_print:
 
         # Add some operations to history
@@ -135,7 +142,10 @@ def test_undo_empty_history():
     history = History()
 
     with patch('builtins.open', MagicMock()), \
-         patch.object(pd, 'read_csv', return_value=pd.DataFrame(columns=["Operation", "Operand #1", "Operand #2", "Result"])), \
+         patch.object(pd,
+            'read_csv',
+            return_value=pd.DataFrame(columns=["Operation", "Operand #1", "Operand #2", "Result"])
+        ), \
          patch('builtins.print') as mock_print:
         # Try to undo when there are no operations in history
         history.undo_last()
@@ -153,7 +163,10 @@ def test_print_empty_history():
 
     # Mock file-writing methods (open) to avoid file operations
     with patch('builtins.open', MagicMock()), \
-         patch.object(pd, 'read_csv', return_value=pd.DataFrame(columns=["Operation", "Operand #1", "Operand #2", "Result"])), \
+         patch.object(pd,
+            'read_csv',
+            return_value=pd.DataFrame(columns=["Operation", "Operand #1", "Operand #2", "Result"])
+        ), \
          patch('builtins.print') as mock_print:
         # Try to print history when it's empty
         history.print_history()
