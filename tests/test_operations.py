@@ -91,3 +91,17 @@ def test_division_by_zero():
     operation = Divide()
     with pytest.raises(ValueError, match="Cannot divide by zero."):
         operation.calculate(10, 0)
+
+# ------------------------------------------------------
+# Parameterized Tests for __repr__ method
+# ------------------------------------------------------
+
+@pytest.mark.parametrize("operation, expected_repr", [
+    (Add(), "Add"),
+    (Subtract(), "Subtract"),
+    (Multiply(), "Multiply"),
+    (Divide(), "Divide")
+])
+def test_operation_repr(operation, expected_repr):
+    """Test the __repr__ method for different operations."""
+    assert repr(operation) == expected_repr

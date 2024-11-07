@@ -1,23 +1,32 @@
 '''
-Can add, subtract, multiply, and divide. All inputs and outputs
-are typehinted to be floats.
+Operations:
+    - Add
+    - Subtract
+    - Multiply
+    - Divide
+All inputs and outputs are typehinted to be floats.
 '''
 
-from abc import ABC, abstractmethod # Creating abstract base classes (ABC)
+from abc import ABC, abstractmethod # Importing abstract base classes (ABC) and methods
 import logging
 
 class OperationTemplate(ABC):
     '''
-    Abstract base class that creates a template the inherting operation subclasses
-    should follow.
+    Abstract base class defining the template for arithmetic operations.
+    All subclasses must implement the 'execute' method.
 
-    Before each operation is executed, the inputs are validated.
+    
+    Template method 'calculate' makes each operation:
+        1. Validate input
+        2. Execute the operation
+        3. Logs the result
     '''
     def calculate(self, a: float, b: float) -> float:
         '''
-        For each subclass inheriting from Operation Template:
-            1. Validate input
-            2. Execute operation
+        Template method for performing the operation:
+            1. Validate input data
+            2. Execute operation (each subclass provides its own implementation)
+            3. Log the result of operation
         '''
         self.validate(a,b)
         result = self.execute(a,b)
@@ -26,20 +35,28 @@ class OperationTemplate(ABC):
 
     def validate(self, a: float, b: float):
         '''
-        Checks inputs are numbers before calculating
+        Checks if inputs are either integers or floats.
+        Raises ValueError for invalid input.
         '''
         if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
             logging.error("Invalid input: %s, %s (Inputs must be numbers)", a, b)
             raise ValueError("Both inputs must be numbers.")
 
     def log_result(self, a: float, b: float, result: float):
-        '''Logs result of calculation'''
+        '''Logs result of operation'''
         logging.info("Operation performed: %s and %s -> Result: %s", a, b, result)
 
     @abstractmethod
     def execute(self, a: float, b: float) -> float:
         '''
-        Abstract methods ALL subclasses must implement.
+        Abstract method ALL subclasses must implement.
+        Each subclass has their own implementation.
+        '''
+
+    @abstractmethod
+    def __repr__(self):
+        '''
+        Abstract method ALL subclasses must implement.
         Each subclass has their own implementation.
         '''
 
@@ -57,6 +74,10 @@ class Add(OperationTemplate):
         '''
         return a + b
 
+    def __repr__(self):
+        '''String representation for debugging'''
+        return "Add"
+
 class Subtract(OperationTemplate):
     '''
     Subtraction operation inheriting from OperationTemplate.
@@ -67,6 +88,10 @@ class Subtract(OperationTemplate):
         '''
         return a - b
 
+    def __repr__(self):
+        '''String representation for debugging'''
+        return "Subtract"
+
 class Multiply(OperationTemplate):
     '''
     Multiplication operation inheriting from OperationTemplate.
@@ -76,6 +101,10 @@ class Multiply(OperationTemplate):
         Returns the product of two floats.
         '''
         return a * b
+
+    def __repr__(self):
+        '''String representation for debugging'''
+        return "Multiply"
 
 class Divide(OperationTemplate):
     '''
@@ -91,6 +120,6 @@ class Divide(OperationTemplate):
             raise ValueError("Cannot divide by zero.")
         return a / b
 
-# -------------------------------
-# ARITHMETIC OPERATIONS END HERE
-# -------------------------------
+    def __repr__(self):
+        '''String representation for debugging'''
+        return "Divide"
