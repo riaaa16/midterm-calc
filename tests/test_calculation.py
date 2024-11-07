@@ -1,40 +1,69 @@
-'''
-Test file to test basic app.calculation method
-'''
-import pytest
+"""Unit tests for the Calculation class in the app.calculation module."""
+
+from unittest.mock import patch
+from app.operations import Add, Subtract
 from app.calculation import Calculation
-from app.operations import Add, Subtract, Multiply, Divide
 
 
-@pytest.mark.parametrize(
-    "operation, operand1, operand2, expected",
-    [
-        (Add(), 5, 3, 8),           # Test addition
-        (Subtract(), 5, 3, 2),      # Test subtraction
-        (Multiply(), 5, 3, 15),     # Test multiplication
-        (Divide(), 6, 2, 3),        # Test division
-    ]
-)
-def test_perform_operation_success(operation, operand1, operand2, expected):
-    """
-    Test successful execution of arithmetic operations in Calculation.
-
-    Parameters:
-    operation (OperationTemplate): The operation to test.
-    operand1 (float): The first operand.
-    operand2 (float): The second operand.
-    expected (float): The expected result.
-    """
-    calc = Calculation()
-    result = calc.perform_operation(operation, operand1, operand2)
-    assert result == expected
+def test_calculation_initialization():
+    """Test initialization of Calculation class."""
+    add_operation = Add()  # Create an instance of Add
+    calc = Calculation(operation=add_operation, operand1=5, operand2=3)
+    assert calc.operation == add_operation
+    assert calc.operand1 == 5
+    assert calc.operand2 == 3
 
 
-def test_perform_operation_divide_by_zero():
-    """
-    Test division by zero case in Calculation, which should raise ValueError.
-    """
-    calc = Calculation()
-    with pytest.raises(ValueError) as excinfo:
-        calc.perform_operation(Divide(), 5, 0)
-    assert str(excinfo.value) == "Cannot divide by zero."
+def test_calculation_str():
+    """Test the __str__ method."""
+    add_operation = Add()  # Create an instance of Add
+    calc = Calculation(operation=add_operation, operand1=5, operand2=3)
+
+    # Directly call the calculate method
+    result = calc.operation.calculate(calc.operand1, calc.operand2)
+
+    expected_result = f"5 {add_operation} 3 = {result}"
+    assert str(calc) == expected_result
+
+
+def test_calculation_repr():
+    """Test the __repr__ method."""
+    add_operation = Add()  # Create an instance of Add
+    calc = Calculation(operation=add_operation, operand1=5, operand2=3)
+
+    expected_repr = f"Calculation({add_operation}, 5, 3)"
+    assert repr(calc) == expected_repr, "The __repr__ method did not return the expected string."
+
+
+# Test cases to cover the perform_operation method
+
+@patch.object(Add, 'calculate', return_value=8)  # Mock the calculate method of Add
+def test_perform_operation_add(mock_calculate):
+    """Test perform_operation for the Add operation."""
+    add_operation = Add()  # Create an instance of Add
+    calc = Calculation(operation=add_operation, operand1=5, operand2=3)
+
+    # Perform the operation
+    result = calc.perform_operation()
+
+    # Check that the calculate method was called correctly
+    mock_calculate.assert_called_once_with(5, 3)  # Assert that calculate was called with 5 and 3
+
+    # Check that the result is correct
+    assert result == 8  # The mock value for the calculate method is 8
+
+
+@patch.object(Subtract, 'calculate', return_value=2)  # Mock the calculate method of Subtract
+def test_perform_operation_subtract(mock_calculate):
+    """Test perform_operation for the Subtract operation."""
+    subtract_operation = Subtract()  # Create an instance of Subtract
+    calc = Calculation(operation=subtract_operation, operand1=5, operand2=3)
+
+    # Perform the operation
+    result = calc.perform_operation()
+
+    # Check that the calculate method was called correctly
+    mock_calculate.assert_called_once_with(5, 3)  # Assert that calculate was called with 5 and 3
+
+    # Check that the result is correct
+    assert result == 2  # The mock value for the calculate method is 2

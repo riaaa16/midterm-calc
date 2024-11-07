@@ -6,8 +6,8 @@ Exceptions:
 - Raises KeyError if incorrect input is entered
 '''
 
-from app.operations import OperationTemplate, Add, Subtract, Multiply, Divide
 import logging
+from app.operations import OperationTemplate, Add, Subtract, Multiply, Divide
 
 class OperationFactory:
     '''
@@ -30,6 +30,6 @@ class OperationFactory:
         try:
             logging.debug("Creating operation: %s", operation)
             return operations_map[operation.lower()]
-        except KeyError:
+        except KeyError as exc:
             logging.error("Tried to call unknown operation.")
-            raise ValueError("Operation does not exist.")
+            raise ValueError("Operation does not exist.") from exc

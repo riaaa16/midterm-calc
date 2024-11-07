@@ -3,9 +3,13 @@ User can interact with this calculator in the terminal to perform basic
 arithmetic operations: addition, subtraction, multiplication, and division.
 '''
 
-from app.operation_factory import OperationFactory
 import logging
 import logging.config
+import os
+from dotenv import load_dotenv
+from app.operation_factory import OperationFactory
+from app.calculation import Calculation
+from app.history_manager import History
 
 def calculator():
     '''
@@ -14,12 +18,18 @@ def calculator():
     Will end once the user types 'exit'.
     '''
 
-    # Creating logger
-    logging.config.fileConfig('logging.conf')
-    logger = logging.getLogger('sampleLogger')
+    load_dotenv()
+
+    if os.getenv('TEST_MODE') != 'True':
+         # Configure logger if TEST_MODE is FALSE
+        logging.config.fileConfig('logging.conf')
+
+    logging.getLogger('sampleLogger')
 
     # Flag to track calculator's start
     start = False
+
+    history = History() # create history instance
 
     print("Welcome to the calculator! Type 'help' for a list of commands.")
 
@@ -30,22 +40,32 @@ def calculator():
             start = True # After calculator starts, set start to True
 
         user_input = input("Enter an command: ")
+        command = user_input.lower()
 
-        if user_input.lower() == 'help':
+        if command == 'help':
             print("Available commands:")
             print("    ✶ add      <num1> <num2>    : Adds two numbers.")
             print("    ✶ subtract <num1> <num2>    : Subtracts two numbers.")
             print("    ✶ multiply <num1> <num2>    : Multiplies two numbers.")
             print("    ✶ divide   <num1> <num2>    : Divides two numbers.")
+            print("    ✶ list                      : Shows operation history.")
+            print("    ✶ undo                      : Removes last operation from history.")
             print("    ✶ exit                      : Exits the calculator.")
             continue
 
         # Exit REPL
-        if user_input.lower() == 'exit':
+        if command == 'exit':
             logging.info("Calculator exited.")
-
             print("Exiting calculator...")
             break
+
+        if command == 'undo':
+            history.undo_last()
+            continue
+
+        if command == 'list':
+            history.print_history()
+            continue
 
         try:
             # LBYL - checking user input is correct before trying operations
@@ -61,8 +81,15 @@ def calculator():
             # Matching operation string to correct operation class
             operation = OperationFactory.create_operation(operation_str)
 
-            result = operation.calculate(num1, num2)
+            # Perform operation
+            calculation  = Calculation(operation, num1, num2)
+            result = calculation.perform_operation()
+
+            # Print result
             print(f"Result: {result}")
+
+            # Add calculation to history
+            history.add_to_history(operation, num1, num2, result)
 
         except ValueError as e:
             logging.error("Invalid input or error: %s", e)
