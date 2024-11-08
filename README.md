@@ -1,7 +1,7 @@
 # Midterm Calculator
 
 ## Video Demonstration
-TBA
+You can watch a brief video demonstration [HERE](https://youtu.be/z1LdCteCxDQ?si=hGELXMh-ZD_0t6B).
 
 ## Installation & Configuration
 1. Install all of the packages with `pip install -r requirements.txt`
